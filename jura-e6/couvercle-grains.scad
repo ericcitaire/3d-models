@@ -1,8 +1,8 @@
-$fn = 120;
+$fn = 100;
 
 width = 133;
 height = 152; // 144
-thickness = 1;
+thickness = 2;
 
 module ellipsoid(p_offset = 0) {
     radius = 30.0;
