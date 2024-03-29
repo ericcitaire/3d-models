@@ -50,26 +50,30 @@ module lid() {
 }
 
 module supports(angle) {
-    y_offset = -7.3;
+    width = 35;
+    touch_width = 2;
+    touch_thickness = .8;
+    z_offset = -7.3;
+    y_offset = 6.6;
     difference() {
         union() {
-            translate([0, -7, y_offset]) cube([30, 1, 100], center = true);
-            translate([0, +7, y_offset]) cube([30, 1, 100], center = true);
+            translate([0, -y_offset, z_offset]) cube([width, 1, 100], center = true);
+            translate([0, +y_offset, z_offset]) cube([width, 1, 100], center = true);
         }
         rotate([0, angle, 0]) ellipsoid(+2);
     }
     difference() {
         union() {
-            translate([0, -7, y_offset]) cube([1, .6, 100], center = true);
-            translate([0, +7, y_offset]) cube([1, .6, 100], center = true);
-            translate([-15, -7, y_offset]) cube([1, .6, 100], center = true);
-            translate([-15, +7, y_offset]) cube([1, .6, 100], center = true);
-            translate([+15, -7, y_offset]) cube([1, .6, 100], center = true);
-            translate([+15, +7, y_offset]) cube([1, .6, 100], center = true);
+            translate([0, -y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
+            translate([0, +y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
+            translate([-width / 2, -y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
+            translate([-width / 2, +y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
+            translate([+width / 2, -y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
+            translate([+width / 2, +y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
         }
         rotate([0, angle, 0]) ellipsoid();
     }
-    translate([0, 0, -50 + y_offset]) cube([40, 30, .6], center = true);
+    translate([0, 0, -50 + z_offset]) cube([width * 1.2, 30, .6], center = true);
 }
 
 angle = 60;
