@@ -2,7 +2,7 @@ $fn = 100;
 
 width = 133;
 height = 152; // 144
-thickness = 2;
+thickness = 1.2;
 
 module ellipsoid(p_offset = 0) {
     radius = 30.0;
@@ -17,7 +17,7 @@ module ellipsoid(p_offset = 0) {
 
 module handle(p_offset = 0) {
     intersection() {
-        translate([0, 0, -38]) ellipsoid(p_offset);
+        translate([0, 0, -40]) ellipsoid(p_offset);
         cube([100, 12 + p_offset * 2, 50], center = true);
     }
 }
@@ -29,7 +29,7 @@ module lid() {
             translate([0, 524, 0]) cylinder(r=600, h=thickness, center=true);
             translate([0, -524, 0]) cylinder(r=600, h=thickness, center=true);
         }
-        ellipsoid(-thickness);
+        ellipsoid();
     }
 
     difference() {
@@ -52,26 +52,27 @@ module lid() {
 module supports(angle) {
     width = 35;
     touch_width = 2;
-    touch_thickness = .8;
+    thickness = 1;
+    touch_thickness = .6;
     z_offset = -7.3;
     y_offset = 6.6;
     difference() {
         union() {
-            translate([0, -y_offset, z_offset]) cube([width, 1, 100], center = true);
-            translate([0, +y_offset, z_offset]) cube([width, 1, 100], center = true);
+            translate([0, -y_offset, z_offset]) cube([width, thickness, 100], center = true);
+            translate([0, +y_offset, z_offset]) cube([width, thickness, 100], center = true);
         }
         rotate([0, angle, 0]) ellipsoid(+2);
     }
     difference() {
         union() {
-            translate([0, -y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
-            translate([0, +y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
-            translate([-width / 2, -y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
-            translate([-width / 2, +y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
-            translate([+width / 2, -y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
-            translate([+width / 2, +y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
+            num = 3;
+            s = width / num;
+            for (i = [0 : num]) {
+                translate([-width / 2 + s * i, -y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
+                translate([-width / 2 + s * i, +y_offset, z_offset]) cube([touch_width, touch_thickness, 100], center = true);
+            }
         }
-        rotate([0, angle, 0]) ellipsoid();
+        rotate([0, angle, 0]) ellipsoid(-.5);
     }
     translate([0, 0, -50 + z_offset]) cube([width * 1.2, 30, .6], center = true);
 }
@@ -79,3 +80,10 @@ module supports(angle) {
 angle = 60;
 rotate([0, angle, 0]) lid();
 #supports(angle);
+
+/*
+difference() {
+    lid();
+    cube(100);
+}
+*/
