@@ -4,13 +4,6 @@ width = 133;
 height = 152; // 144
 thickness = 1;
 
-/*
-w = 50;
-h = 200;
-translate([0, 0, h]) rotate([-90, 0, 0]) linear_extrude(1) polygon([[0, 0], [-w / 2, h], [w /2, h], [0, 0]]);
-cube([w, 20, 1], center = true);
-*/
-
 module ellipsoid(p_offset = 0) {
     radius = 30.0;
     ratio_x = 1.9;
