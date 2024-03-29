@@ -18,7 +18,7 @@ module ellipsoid(p_offset = 0) {
 module handle(p_offset = 0) {
     intersection() {
         translate([0, 0, -38]) ellipsoid(p_offset);
-        cube([100, 15 + p_offset * 2, 50], center = true);
+        cube([100, 12 + p_offset * 2, 50], center = true);
     }
 }
 
@@ -34,10 +34,10 @@ module lid() {
 
     difference() {
         intersection() {
-            handle();
+            handle(+thickness);
             ellipsoid();
         }
-        handle(-thickness);
+        handle();
     }
 
     // #translate([0, 0, 5]) cube([85, 45, 10], center = true);
@@ -45,7 +45,7 @@ module lid() {
         ellipsoid();
         ellipsoid(-thickness);
         translate([0, 0, 100 + thickness]) cube(200, center = true);
-        handle(-thickness);
+        handle();
     }
 }
 
