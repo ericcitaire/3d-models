@@ -63,6 +63,11 @@ module thumb()
     translate([ 45, 53, 0 ]) scale([ 1.5, 1, .7 ]) sphere(20);
 }
 
+module volume_buttons()
+{
+    translate([ 10, -33, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 5, h = 50);
+}
+
 difference()
 {
     scale([ (x + 3) / x, (y + 3) / y, (z + 3) / z ]) main();
@@ -73,4 +78,5 @@ difference()
     audio_plug();
     mic();
     thumb();
+    volume_buttons();
 }
