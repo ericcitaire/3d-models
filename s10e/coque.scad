@@ -35,7 +35,7 @@ module front_camera()
 
 module usb_plug()
 {
-    translate([ 0, 0, 1 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -x / 2 - 10 ])
+    translate([ 10, 0, 1 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -x / 2 - 10 ])
     {
         cube([ 6, 7, 20 ], center = true);
         translate([ 0, -3.5, -10 ]) cylinder(d = 6, h = 20);
@@ -45,32 +45,28 @@ module usb_plug()
 
 module audio_plug()
 {
-    translate([ -80, -17.5, 0 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -10 ]) cylinder(d = 8, h = 20);
+    translate([ -70, -17.5, 0 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -10 ]) cylinder(d = 8, h = 20);
 }
 
 module mic()
 {
     translate([ 0, 20, 0 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -x / 2 - 10 ])
     {
-        cube([ 6, 10, 20 ], center = true);
-        translate([ 0, -5, -10 ]) cylinder(d = 6, h = 20);
-        translate([ 0, 5, -10 ]) cylinder(d = 6, h = 20);
+        translate([ 0, 0, 5 ]) cube([ 6, 10, 30 ], center = true);
+        translate([ 0, -5, -10 ]) cylinder(d = 6, h = 30);
+        translate([ 0, 5, -10 ]) cylinder(d = 6, h = 30);
     }
 }
 
 module thumb()
 {
-    translate([ 45, 58, 0 ])
-    {
-        scale([ 2, 1, .6 ]) sphere(20);
-        translate([ 0, -20, 0 ]) cube([ 24, 5, 5 ], center = true);
-    }
+    translate([ 45, 53, 0 ]) scale([ 1.5, 1, .7 ]) sphere(20);
 }
 
 difference()
 {
-    scale(1.05) main();
-    translate([ 0, 0, -2 ]) scale(.98) main();
+    scale([ (x + 3) / x, (y + 3) / y, (z + 3) / z ]) main();
+    translate([ 0, 0, -5 ]) scale([ (x - 5) / x, (y - 5) / y, 1.1 ]) main();
     main();
     front_camera();
     usb_plug();
