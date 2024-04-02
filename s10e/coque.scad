@@ -1,0 +1,80 @@
+x = 142;
+y = 70;
+z = 8;
+
+$fn = 30;
+
+module main()
+{
+    cube([ x, y, z ], center = true);
+    for (xx = [ -x, +x ])
+    {
+        rotate([ 90, 0, 0 ]) translate([ xx / 2, 0, -y / 2 ]) cylinder(h = y, d = z);
+    }
+    for (yy = [ -y, +y ])
+    {
+        rotate([ 0, 90, 0 ]) translate([ 0, yy / 2, -x / 2 ]) cylinder(h = x, d = z);
+    }
+    for (xx = [ -x, +x ])
+    {
+        for (yy = [ -y, +y ])
+        {
+            translate([ xx / 2, yy / 2, 0 ]) sphere(d = z);
+        }
+    }
+}
+
+module front_camera()
+{
+    linear_extrude(height = z + 5) translate([ 142 / 2 - 25, 0, 0 ]) minkowski()
+    {
+        square([ 10, 30 ], center = true);
+        circle(d = 5);
+    }
+}
+
+module usb_plug()
+{
+    translate([ 0, 0, 1 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -x / 2 - 10 ])
+    {
+        cube([ 6, 7, 20 ], center = true);
+        translate([ 0, -3.5, -10 ]) cylinder(d = 6, h = 20);
+        translate([ 0, 3.5, -10 ]) cylinder(d = 6, h = 20);
+    }
+}
+
+module audio_plug()
+{
+    translate([ -80, -17.5, 0 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -10 ]) cylinder(d = 8, h = 20);
+}
+
+module mic()
+{
+    translate([ 0, 20, 0 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -x / 2 - 10 ])
+    {
+        cube([ 6, 10, 20 ], center = true);
+        translate([ 0, -5, -10 ]) cylinder(d = 6, h = 20);
+        translate([ 0, 5, -10 ]) cylinder(d = 6, h = 20);
+    }
+}
+
+module thumb()
+{
+    translate([ 45, 58, 0 ])
+    {
+        scale([ 2, 1, .6 ]) sphere(20);
+        translate([ 0, -20, 0 ]) cube([ 24, 5, 5 ], center = true);
+    }
+}
+
+difference()
+{
+    scale(1.05) main();
+    translate([ 0, 0, -2 ]) scale(.98) main();
+    main();
+    front_camera();
+    usb_plug();
+    audio_plug();
+    mic();
+    thumb();
+}
