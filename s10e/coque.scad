@@ -6,18 +6,18 @@ $fn = 30;
 
 module main()
 {
-    cube([ x, y, z ], center = true);
-    for (xx = [ -x, +x ])
+    cube([ x - z, y - z, z ], center = true);
+    for (xx = [ -(x - z), +(x - z) ])
     {
-        rotate([ 90, 0, 0 ]) translate([ xx / 2, 0, -y / 2 ]) cylinder(h = y, d = z);
+        rotate([ 90, 0, 0 ]) translate([ xx / 2, 0, -(y - z) / 2 ]) cylinder(h = y - z, d = z);
     }
-    for (yy = [ -y, +y ])
+    for (yy = [ -(y - z), +(y - z) ])
     {
-        rotate([ 0, 90, 0 ]) translate([ 0, yy / 2, -x / 2 ]) cylinder(h = x, d = z);
+        rotate([ 0, 90, 0 ]) translate([ 0, yy / 2, -(x - z) / 2 ]) cylinder(h = x - z, d = z);
     }
-    for (xx = [ -x, +x ])
+    for (xx = [ -(x - z), +(x - z) ])
     {
-        for (yy = [ -y, +y ])
+        for (yy = [ -(y - z), +(y - z) ])
         {
             translate([ xx / 2, yy / 2, 0 ]) sphere(d = z);
         }
