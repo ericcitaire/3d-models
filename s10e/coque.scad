@@ -1,8 +1,9 @@
 x = 142;
 y = 70;
 z = 8;
+t = 3;
 
-$fn = 30;
+$fn = 80;
 
 module main()
 {
@@ -70,8 +71,8 @@ module volume_buttons()
 
 difference()
 {
-    scale([ (x + 3) / x, (y + 3) / y, (z + 3) / z ]) main();
-    translate([ 0, 0, -5 ]) scale([ (x - 5) / x, (y - 5) / y, 1.1 ]) main();
+    scale([ (x + t) / x, (y + t) / y, (z + t) / z ]) main();
+    translate([ 0, 0, -t ]) scale([ (x - 5) / x, (y - 5) / y, (z + t) / z ]) main();
     main();
     front_camera();
     usb_plug();
