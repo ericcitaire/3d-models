@@ -1,26 +1,26 @@
 x = 142;
 y = 70;
 z = 8;
-t = 1.2;
+t = 3;
 
-$fn = 20;
+$fn = 50;
 
-module main()
+module main(offset = 0)
 {
-    cube([ x - z, y - z, z ], center = true);
+    cube([ x - z, y - z, z + offset * 2 ], center = true);
     for (xx = [ -(x - z), +(x - z) ])
     {
-        rotate([ 90, 0, 0 ]) translate([ xx / 2, 0, -(y - z) / 2 ]) cylinder(h = y - z, d = z);
+        rotate([ 90, 0, 0 ]) translate([ xx / 2, 0, -(y - z) / 2 ]) cylinder(h = y - z, d = z + offset * 2);
     }
     for (yy = [ -(y - z), +(y - z) ])
     {
-        rotate([ 0, 90, 0 ]) translate([ 0, yy / 2, -(x - z) / 2 ]) cylinder(h = x - z, d = z);
+        rotate([ 0, 90, 0 ]) translate([ 0, yy / 2, -(x - z) / 2 ]) cylinder(h = x - z, d = z + offset * 2);
     }
     for (xx = [ -(x - z), +(x - z) ])
     {
         for (yy = [ -(y - z), +(y - z) ])
         {
-            translate([ xx / 2, yy / 2, 0 ]) sphere(d = z);
+            translate([ xx / 2, yy / 2, 0 ]) sphere(d = z + offset * 2);
         }
     }
 }
@@ -51,11 +51,11 @@ module audio_plug()
 
 module mic()
 {
-    translate([ 0, 20, 0 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -x / 2 - 10 ])
+    translate([ 0, 18, 0 ]) rotate([ 0, 90, 0 ]) translate([ 0, 0, -x / 2 - 10 ])
     {
-        translate([ 0, 0, 5 ]) cube([ 6, 10, 30 ], center = true);
-        translate([ 0, -5, -10 ]) cylinder(d = 6, h = 30);
-        translate([ 0, 5, -10 ]) cylinder(d = 6, h = 30);
+        translate([ 0, 0, 5 ]) cube([ 6, 8, 30 ], center = true);
+        translate([ 0, -4, -10 ]) cylinder(d = 6, h = 30);
+        translate([ 0, 4, -10 ]) cylinder(d = 6, h = 30);
     }
 }
 
@@ -71,8 +71,8 @@ module volume_buttons()
 
 difference()
 {
-    scale([ (x + t) / x, (y + t) / y, (z + t) / z ]) main();
-    translate([ 0, 0, -t ]) scale([ (x - 5) / x, (y - 5) / y, (z + t) / z ]) main();
+    main(offset = t);
+    translate([ 0, 0, -z / 2 ]) scale([ (x - 5) / x, (y - 5) / y, 2 ]) main();
     main();
     front_camera();
     usb_plug();
