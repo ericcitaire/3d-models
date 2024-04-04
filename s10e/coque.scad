@@ -27,9 +27,9 @@ module main(offset = 0)
 
 module front_camera()
 {
-    linear_extrude(height = z + 5) translate([ x / 2 - 25, 0, 0 ]) minkowski()
+    linear_extrude(height = z + 5) translate([ x / 2 - 25.5, 0, 0 ]) minkowski()
     {
-        square([ 5, 28 ], center = true);
+        square([ 4, 25 ], center = true);
         circle(d = 8);
     }
 }
