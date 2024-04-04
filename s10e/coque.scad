@@ -3,7 +3,7 @@ y = 70;
 z = 8;
 t = 3;
 
-$fn = 50;
+$fn = 60;
 
 module main(offset = 0)
 {
@@ -27,7 +27,7 @@ module main(offset = 0)
 
 module front_camera()
 {
-    linear_extrude(height = z + 5) translate([ 142 / 2 - 25, 0, 0 ]) minkowski()
+    linear_extrude(height = z + 5) translate([ x / 2 - 25, 0, 0 ]) minkowski()
     {
         square([ 5, 28 ], center = true);
         circle(d = 8);
@@ -66,13 +66,29 @@ module thumb()
 
 module volume_buttons()
 {
-    translate([ 10, -33, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 5, h = 50);
+    translate([ 10, -33, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = t * 2, h = 50);
+}
+
+module face()
+{
+    translate([ 0, 0, -8 ]) minkowski()
+    {
+        difference()
+        {
+            cube([ x, y, z ], center = true);
+            translate([ -x / 2, y / 2, z / 2 ]) rotate([ 0, 90, 0 ]) cylinder(h = x, r = z, $fn = 3);
+            translate([ -x / 2, -y / 2, z / 2 ]) rotate([ 0, 90, 0 ]) cylinder(h = x, r = z, $fn = 3);
+            translate([ -x / 2, y / 2, z / 2 ]) rotate([ 90, 90, 0 ]) cylinder(h = y, r = z, $fn = 3);
+            translate([ x / 2, y / 2, z / 2 ]) rotate([ 90, 90, 0 ]) cylinder(h = y, r = z, $fn = 3);
+        }
+        sphere(r = 3);
+    }
 }
 
 difference()
 {
     main(offset = t);
-    translate([ 0, 0, -z / 2 ]) scale([ (x - 5) / x, (y - 5) / y, 2 ]) main();
+    face();
     main();
     front_camera();
     usb_plug();
