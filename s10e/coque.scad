@@ -61,7 +61,7 @@ module mic()
 
 module thumb()
 {
-    translate([ 45, 53, 0 ]) scale([ 1.5, 1, .7 ]) sphere(20);
+    translate([ 45, 53, 0 ]) scale([ 1.3, 1, .6 ]) sphere(20);
 }
 
 module volume_buttons()
@@ -71,7 +71,7 @@ module volume_buttons()
 
 module face()
 {
-    translate([ 0, 0, -8 ]) minkowski()
+    translate([ 0, 0, -9 ]) minkowski()
     {
         difference()
         {
