@@ -89,6 +89,7 @@ module face()
         }
         sphere(r = 3);
     }
+    translate([ 0, 0, -15 ]) cube([ 1000, 1000, 20 ], center = true);
 }
 
 difference()
