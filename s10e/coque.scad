@@ -61,12 +61,12 @@ module mic()
 
 module thumb()
 {
-    translate([ 45, 53, 0 ]) scale([ 1.3, 1, .6 ]) sphere(20);
+    translate([ 43, 53, 0 ]) scale([ 1.2, 1, 1 ]) sphere(20, $fn = 10);
 }
 
 module volume_buttons_recess()
 {
-    translate([ 10, -35, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 3, h = 50);
+    translate([ 12.5, -35, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 3, h = 40);
 }
 
 module volume_buttons_excess()
