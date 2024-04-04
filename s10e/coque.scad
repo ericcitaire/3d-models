@@ -64,9 +64,15 @@ module thumb()
     translate([ 45, 53, 0 ]) scale([ 1.3, 1, .6 ]) sphere(20);
 }
 
-module volume_buttons()
+module volume_buttons_recess()
 {
-    translate([ 10, -33, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = t * 2, h = 50);
+    translate([ 10, -35, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 3, h = 50);
+}
+
+module volume_buttons_excess()
+{
+    translate([ 15, -(34 + t), 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 5, h = 10, $fn = 10);
+    translate([ 30, -(34 + t), 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 5, h = 20, $fn = 10);
 }
 
 module face()
@@ -87,7 +93,11 @@ module face()
 
 difference()
 {
-    main(offset = t);
+    union()
+    {
+        main(offset = t);
+        volume_buttons_excess();
+    }
     face();
     main();
     front_camera();
@@ -95,5 +105,5 @@ difference()
     audio_plug();
     mic();
     thumb();
-    volume_buttons();
+    volume_buttons_recess();
 }
