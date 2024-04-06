@@ -66,13 +66,13 @@ module thumb()
 
 module volume_buttons_recess()
 {
-    translate([ 12.5, -35, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 3, h = 40);
+    translate([ 14, -34, 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 6, h = 40);
 }
 
 module volume_buttons_excess()
 {
-    translate([ 15, -(34 + t), 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 5, h = 10, $fn = 10);
-    translate([ 30, -(34 + t), 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 5, h = 20, $fn = 10);
+    translate([ 16, -(33 + t), 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 5, h = 10, $fn = 10);
+    translate([ 31.5, -(33 + t), 0 ]) rotate([ 0, 90, 0 ]) cylinder(d = 5, h = 20, $fn = 10);
 }
 
 module face()
