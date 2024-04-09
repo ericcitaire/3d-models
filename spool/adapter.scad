@@ -9,18 +9,18 @@ VASE = true;
 
 $fn = 60;
 
-module tube(d, o)
+module tube(d1, d2, o)
 {
     if (VASE)
     {
-        cylinder(h = H, d = d);
+        cylinder(h = H, r1 = d1 / 2, r2 = d2 / 2);
     }
     else
     {
         difference()
         {
-            cylinder(h = H, d = d + (o > 0 ? o : 0));
-            cylinder(h = H, d = d + (o < 0 ? o : 0));
+            cylinder(h = H, r1 = d1 / 2 + (o > 0 ? o * 2 : 0), r2 = d2 / 2 + (o > 0 ? o * 2 : 0));
+            cylinder(h = H, r1 = d1 / 2 + (o < 0 ? o * 2 : 0), r2 = d2 / 2 + (o < 0 ? o * 2 : 0));
         }
     }
 }
@@ -28,7 +28,7 @@ module tube(d, o)
 // inner
 difference()
 {
-    tube(d = INNER_W, o = +THICKNESS);
+    tube(d1 = INNER_W, d2 = INNER_W, o = +THICKNESS);
     for (a = ANGLES)
     {
         rotate(a)
@@ -41,7 +41,7 @@ difference()
 // outer
 intersection()
 {
-    tube(d = OUTER_W, o = -THICKNESS);
+    tube(d1 = OUTER_W, d2 = OUTER_W, o = -THICKNESS);
     for (a = ANGLES)
     {
         rotate(a)
