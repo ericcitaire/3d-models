@@ -61,10 +61,10 @@ difference()
             translate([ 20, 20, 0 ]) cylinder(h = H, d = X, $fn = 4);
         }
     }
-    cylinder(h = H, d = INNER_W);
+    cylinder(h = H, r1 = INNER_W / 2, r2 = INNER_W / 2);
     difference()
     {
         cylinder(h = H, d = 500);
-        cylinder(h = H, d = OUTER_W);
+        cylinder(h = H, r1 = OUTER_W / 2, r2 = OUTER_W / 2);
     }
 }
