@@ -1,6 +1,6 @@
-H = 8;
+H = 12;
 INNER_W = 50 + 1;
-OUTER_W = 57 + 1;
+OUTER_W = 72 + 1;
 THICKNESS = 3;
 X = 30;
 ANGLES = [0:120:360];
