@@ -1,4 +1,4 @@
-spool_width = 12;
+spool_width = 48;
 box_diameter = 50 + 1;
 spool_inner_width = 72 + 1;
 thickness = 3;
@@ -7,7 +7,9 @@ angles = [0:120:360];
 
 $fn = 80;
 
-module m(inner1, inner2, outer1, outer2, height)
+x = spool_width / 8;
+
+module part(inner1, inner2, outer1, outer2, height)
 {
     // inner
     difference()
@@ -30,12 +32,8 @@ module m(inner1, inner2, outer1, outer2, height)
     }
 }
 
-translate([ 0, 0, spool_width * 0 ])
-    m(spool_inner_width, spool_inner_width, spool_inner_width, spool_inner_width, spool_width / 2);
-translate([ 0, 0, spool_width * 0.5 ])
-    m(spool_inner_width, box_diameter, spool_inner_width, spool_inner_width, spool_width);
-translate([ 0, 0, spool_width * 1.5 ]) m(box_diameter, box_diameter, spool_inner_width, spool_inner_width, spool_width);
-translate([ 0, 0, spool_width * 2.5 ])
-    m(box_diameter, spool_inner_width, spool_inner_width, spool_inner_width, spool_width);
-translate([ 0, 0, spool_width * 3.5 ])
-    m(spool_inner_width, spool_inner_width, spool_inner_width, spool_inner_width, spool_width / 2);
+translate([ 0, 0, x * 0 ]) part(spool_inner_width, spool_inner_width, spool_inner_width, spool_inner_width, x);
+translate([ 0, 0, x * 1 ]) part(spool_inner_width, box_diameter, spool_inner_width, spool_inner_width, x * 2);
+translate([ 0, 0, x * 3 ]) part(box_diameter, box_diameter, spool_inner_width, spool_inner_width, x * 2);
+translate([ 0, 0, x * 5 ]) part(box_diameter, spool_inner_width, spool_inner_width, spool_inner_width, x * 2);
+translate([ 0, 0, x * 7 ]) part(spool_inner_width, spool_inner_width, spool_inner_width, spool_inner_width, x);
