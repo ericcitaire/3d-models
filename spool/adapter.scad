@@ -11,17 +11,7 @@ x = spool_width / 8;
 
 module part(inner1, inner2, outer1, outer2, height)
 {
-    // inner
-    difference()
-    {
-        cylinder(h = height, r1 = inner1 / 2, r2 = inner2 / 2);
-        for (a = angles)
-        {
-            rotate(a) translate([ 20, 20, 0 ]) cylinder(h = height, d = leg_width + thickness, $fn = 4);
-        }
-    }
-
-    // outer
+    cylinder(h = height, r1 = inner1 / 2, r2 = inner2 / 2);
     intersection()
     {
         cylinder(h = height, r1 = outer1 / 2, r2 = outer2 / 2);
