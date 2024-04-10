@@ -1,7 +1,7 @@
 external_width = 300;
 external_height = 440;
 external_depth = 65;
-wall_thickness = 1.8;
+wall_thickness = 3;
 width = external_width - wall_thickness * 2;
 height = external_height - wall_thickness * 2;
 depth = external_depth - wall_thickness;
@@ -14,7 +14,7 @@ module compartiments()
 {
     difference()
     {
-        translate([ wall_thickness, wall_thickness, wall_thickness ])
+        translate([ wall_thickness, wall_thickness, -1 ])
         {
             difference()
             {
@@ -29,20 +29,16 @@ module compartiments()
             {
                 translate([ w * i + wall_thickness * (i - 1), 0, 0 ])
                 {
-                    cube([ wall_thickness, i == 1 ? height : height - h, depth - wall_thickness ]);
-                    translate([ wall_thickness / 2, 0, depth - wall_thickness ]) rotate([ -90, 0, 0 ])
-                        cylinder(h = i == 1 ? height : height - h, d = wall_thickness);
+                    cube([ wall_thickness, i == 1 ? height : height - h, depth ]);
                 }
             }
 
             translate([ w, height - h, 0 ])
             {
-                cube([ width - w, wall_thickness, depth - wall_thickness ]);
-                translate([ wall_thickness / 2, wall_thickness / 2, depth - wall_thickness ]) rotate([ -90, 0, -90 ])
-                    cylinder(h = width - w - wall_thickness / 2, d = wall_thickness);
+                cube([ width - w, wall_thickness, depth ]);
             }
         }
-        chanfrein = wall_thickness * 1.5;
+        chanfrein = wall_thickness * 0;
         rotate([ 0, 45, 0 ]) translate([ -chanfrein / 2, 0, -chanfrein / 2 ])
             cube([ chanfrein, external_height + 1, chanfrein ]);
         rotate([ 0, 45, 90 ]) translate([ -chanfrein / 2, -external_width, -chanfrein / 2 ])
@@ -58,7 +54,7 @@ module compartiments()
 // compartiments();
 if (part < 3)
 {
-    rotate(a = [ 0, -45, 0 ]) intersection()
+    rotate([ 180, 0, 0 ]) intersection()
     {
         translate([ 0, -external_height / 3 * part, 0 ]) #compartiments();
         cube([ external_width * .45, external_height / 3, external_depth ]);
@@ -66,7 +62,7 @@ if (part < 3)
 }
 else
 {
-    rotate(a = [ 0, 45, 0 ]) intersection()
+    rotate([ 180, 0, 0 ]) intersection()
     {
         translate([ -external_width * .45, -external_height / 3 * (part - 3), 0 ]) #compartiments();
         cube([ external_width * .65, external_height / 3, external_depth ]);
