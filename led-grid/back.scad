@@ -2,6 +2,7 @@ hole_d = 3;
 esp32_holes_spacing_w = 23;
 esp32_holes_spacing_h = 47;
 led = 8.2;
+gap = 3;
 
 $fn = 50;
 
@@ -15,9 +16,14 @@ difference ()
   x = 2.8;
   translate ([ -x, -x, 0 ]) for (i = [ 1, 4, 7 ])
   {
-    translate ([ i * led, led, -1 ]) cylinder (h = 5, r = 1, $fn = 8);
-    translate ([ i * led, led * 7, -1 ]) cylinder (h = 5, r = 1, $fn = 8);
+    translate ([ i * led, led, -1 ]) cylinder (h = 5, r = 1.2, $fn = 8);
+    translate ([ i * led, led * 7, -1 ]) cylinder (h = 5, r = 1.2, $fn = 8);
   }
+  translate ([ 60 - 10, 0, -1 ]) cube ([ 10, 10, 5 ]);
+  translate ([ 0, 60 - 10, -1 ]) cube ([ 10, 10, 5 ]);
+  translate ([ 0, 30 - 5, -1 ]) cube ([ 10, 10, 5 ]);
+  translate ([ gap + esp32_holes_spacing_h - 25, 30 - 10, -1 ])
+      cube ([ 25, 20, 5 ]);
 }
 module
 entretoise ()
@@ -33,7 +39,6 @@ difference ()
 {
   union ()
   {
-    gap = 3;
     translate ([ gap, 30 - esp32_holes_spacing_w / 2, .8 ]) entretoise ();
     translate ([ gap, 30 + esp32_holes_spacing_w / 2, .8 ]) entretoise ();
     translate (
