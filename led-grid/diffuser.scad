@@ -2,17 +2,20 @@ $fn = 50;
 
 walls = 1.2;
 screen = .4;
-led = 8.2;
+led_x = 8.4;
+led_y = 8.0;
+led_d = sqrt (led_x * led_x + led_y * led_y);
+led_scale_x = led_x / led_y;
+led_scale_y = led_y / led_x;
 
 module
 led_slot ()
 {
-  d = sqrt (led * led * 2);
   difference ()
   {
-    cube (size = [ led, led, 3 ]);
-    translate ([ led / 2, led / 2, screen ]) rotate (45)
-        cylinder (h = 3, d1 = d - walls * 3, d2 = d - walls / 3, $fn = 4);
+    translate ([ led_x / 2, led_y / 2, screen ])
+        scale ([ led_scale_x, led_scale_y, 1 ]) rotate (45) cylinder (
+            h = 3, d1 = led_d - walls * 3, d2 = led_d - walls / 3, $fn = 4);
   }
 }
 
@@ -28,18 +31,21 @@ magnet_holder ()
 
 difference ()
 {
+  translate ([ -.4, -.4, 0 ]) cube ([ led_x * 8 + .8, led_y * 8 + .8, 3 ]);
+
   for (x = [0:7])
     {
       for (y = [0:7])
         {
-          translate ([ x * led, y * led, 0 ]) { led_slot (); }
+          translate ([ x * led_x, y * led_y, 0 ]) { led_slot (); }
         }
     }
 
   for (i = [ 1, 4, 7 ])
     {
-      translate ([ i * led, led, screen ]) cylinder (h = 5, r = 1, $fn = 8);
-      translate ([ i * led, led * 7, screen ])
+      translate ([ i * led_x, led_y, screen ])
+          cylinder (h = 5, r = 1, $fn = 8);
+      translate ([ i * led_x, led_y * 7, screen ])
           cylinder (h = 5, r = 1, $fn = 8);
     }
 }
@@ -47,19 +53,20 @@ difference ()
 difference ()
 {
   translate ([ -walls, -walls, 0 ])
-      cube (size = [ 8 * led + walls * 2, 8 * led + walls * 2, 4 ]);
-  translate ([ 0, 0, screen ]) cube (size = [ 8 * led, 8 * led, 4 ]);
+      cube (size = [ 8 * led_x + walls * 2, 8 * led_y + walls * 2, 4 ]);
+  translate ([ -.4, -.4, screen ])
+      cube (size = [ 8 * led_x + .8, 8 * led_y + .8, 4 ]);
 }
 
-translate ([ 4 * led, -7.5, 0 ]) magnet_holder ();
-translate ([ 4 * led, 8 * led + 7.5, 0 ]) magnet_holder ();
+translate ([ 4 * led_x, -7.5, 0 ]) magnet_holder ();
+translate ([ 4 * led_x, 8 * led_y + 7.5, 0 ]) magnet_holder ();
 
-translate ([ 8 * 4 + walls / 2, 8 * 4 + walls / 2, 0 ])
-    cylinder (h = screen, r = 47);
+translate ([ led_x * 4 + walls / 2 - 1, led_y * 4 + walls / 2 - 1, 0 ])
+    cylinder (h = screen, d = led_d * 8);
 difference ()
 {
-  translate ([ 8 * 4 + walls / 2, 8 * 4 + walls / 2, 0 ])
-      cylinder (h = 4, r = 48);
-  translate ([ 8 * 4 + walls / 2, 8 * 4 + walls / 2, screen ])
-      cylinder (h = 4, r = 47);
+  translate ([ led_x * 4 + walls / 2 - 1, led_y * 4 + walls / 2 - 1, 0 ])
+      cylinder (h = 4, d = led_d * 8 + 2);
+  translate ([ led_x * 4 + walls / 2 - 1, led_y * 4 + walls / 2 - 1, screen ])
+      cylinder (h = 4, d = led_d * 8);
 }
