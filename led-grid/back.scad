@@ -1,8 +1,15 @@
 hole_d = 3;
 esp32_holes_spacing_w = 23;
 esp32_holes_spacing_h = 47;
-led = 8.2;
 gap = 3;
+
+walls = 1.2;
+screen = .4;
+led_x = 8.4;
+led_y = 8.0;
+led_d = sqrt (led_x * led_x + led_y * led_y);
+led_scale_x = 1;
+led_scale_y = led_y / led_x;
 
 $fn = 50;
 
@@ -16,8 +23,9 @@ difference ()
   x = 2.8;
   translate ([ -x, -x, 0 ]) for (i = [ 1, 4, 7 ])
   {
-    translate ([ i * led, led, -1 ]) cylinder (h = 5, r = 1.2, $fn = 8);
-    translate ([ i * led, led * 7, -1 ]) cylinder (h = 5, r = 1.2, $fn = 8);
+    translate ([ i * led_x, led_y, -1 ]) cylinder (h = 2, r1 = 1, r2 = 2);
+    translate ([ i * led_x, led_y * 7, -.1 ])
+        cylinder (h = 1.2, r1 = 1, r2 = 2);
   }
   translate ([ 60 - 10, 0, -1 ]) cube ([ 10, 10, 5 ]);
   translate ([ 0, 60 - 10, -1 ]) cube ([ 10, 10, 5 ]);
