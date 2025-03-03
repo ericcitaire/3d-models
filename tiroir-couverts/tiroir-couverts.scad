@@ -1,12 +1,12 @@
 external_width = 300;
 external_height = 440;
 external_depth = 65;
-wall_thickness = 3;
+wall_thickness = 1.5;
 width = external_width - wall_thickness * 2;
 height = external_height - wall_thickness * 2;
 depth = external_depth - wall_thickness;
 
-part = 3;
+part = 0;
 
 $fn = 30;
 
@@ -14,7 +14,7 @@ module compartiments()
 {
     difference()
     {
-        translate([ wall_thickness, wall_thickness, -1 ])
+        translate([ wall_thickness, wall_thickness, wall_thickness ])
         {
             difference()
             {
@@ -54,7 +54,7 @@ module compartiments()
 // compartiments();
 if (part < 3)
 {
-    rotate([ 180, 0, 0 ]) intersection()
+    intersection()
     {
         translate([ 0, -external_height / 3 * part, 0 ]) #compartiments();
         cube([ external_width * .45, external_height / 3, external_depth ]);
@@ -62,7 +62,7 @@ if (part < 3)
 }
 else
 {
-    rotate([ 180, 0, 0 ]) intersection()
+    intersection()
     {
         translate([ -external_width * .45, -external_height / 3 * (part - 3), 0 ]) #compartiments();
         cube([ external_width * .65, external_height / 3, external_depth ]);
