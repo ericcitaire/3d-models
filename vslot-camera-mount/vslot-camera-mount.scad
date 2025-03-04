@@ -67,7 +67,7 @@ module fillet(r = 2) {
     }
 }
 
-module teardrop(r = 2.5) {
+module teardrop(r = 3) {
     hull() {
         circle(r = r);
         polygon([[.1, 0], [-.1, 0], [0, -r * 1.25]]);
