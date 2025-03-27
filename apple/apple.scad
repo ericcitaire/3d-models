@@ -1,6 +1,7 @@
 $fn = $preview ? 50 : 150;
 
-scale = .15;
+scale = .05;
+walls = .5;
 
 module centered_logo() {
     translate([-425, 648, 0]) import("Apple_logo_black.svg");
@@ -21,7 +22,7 @@ module leaf_in() {
     rotate([41, 0, 0])
     rotate_extrude()
     difference() {
-        offset(-1 / scale) flat_leaf();
+        offset(-walls / scale) flat_leaf();
         translate([-250, 360, 0]) square([500, 800], center = true);
     }
 }
@@ -60,7 +61,7 @@ module apple_3d_in() {
     scale(scale)
     rotate_extrude()
     difference() {
-        offset(-1 / scale) flat_apple_body();
+        offset(-walls / scale) flat_apple_body();
         mirror([1, 0, 0]) square([500, 800]);
     }
 }
@@ -81,7 +82,7 @@ module stem_in() {
     scale(scale)
     translate([0, 0, 700])
     rotate([6, 0, 0])
-    translate([0, 0, -.05]) cylinder(h = h + .1, d1 = d1 - 2 / scale, d2 = d2 - 2 / scale);
+    translate([0, 0, -.05]) cylinder(h = h + .1, d1 = d1 - (walls * 2) / scale, d2 = d2 - (walls * 2) / scale);
 }
 
 module stem_out() {
@@ -135,7 +136,7 @@ module hole_in() {
     translate([-h / 2, -485, 470])
     rotate([0, 90, 0])
     linear_extrude(h)
-    circle(d = d - 2 / scale);
+    circle(d = d - (walls * 2) / scale);
 }
 
 module hole_out() {
@@ -160,7 +161,6 @@ difference() {
     if ($preview)
     translate([0, -500, 0]) cube([1000, 1000, 1000]);
 }
-
 
 //color("blue") rotate([90, 0, 270]) scale(scale) centered_logo();
 
