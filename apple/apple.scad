@@ -1,4 +1,4 @@
-$fn = 60;
+$fn = $preview ? 50 : 150;
 
 scale = .3;
 
@@ -6,59 +6,121 @@ module centered_logo() {
     translate([-425, 648, 0]) import("Apple_logo_black.svg");
 }
 
-module leaf() {
+module flat_leaf() {
     dx = 170;
     d = 460;
+    translate([0, 160]) intersection() {
+        translate([+dx, 0]) circle(d = d);
+        translate([-dx, 0]) circle(d = d);
+    }
+}
+
+module leaf_in() {
+    scale(scale)
     translate([0, 20, 766])
     rotate([41, 0, 0])
     rotate_extrude()
     difference() {
-        translate([0, 160]) intersection() {
-            translate([+dx, 0]) circle(d = d);
-            translate([-dx, 0]) circle(d = d);
-        }
+        offset(-1 / scale) flat_leaf();
         translate([-250, 360, 0]) square([500, 800], center = true);
     }
 }
 
-module apple_half_body() {
+module leaf_out() {
+    scale(scale)
+    translate([0, 20, 766])
+    rotate([41, 0, 0])
+    rotate_extrude()
+    difference() {
+        flat_leaf();
+        translate([-250, 360, 0]) square([500, 800], center = true);
+    }
+}
+
+module leaf() {
+    difference() {
+        leaf_out();
+        leaf_in();
+    }
+}
+
+module flat_apple_half_body() {
     intersection() {
         centered_logo();
         translate([-250, 360, 0]) square([500, 800], center = true);
     }
 }
 
-module apple_body() {
-    apple_half_body();
-    mirror([1, 0, 0]) apple_half_body();
+module flat_apple_body() {
+    flat_apple_half_body();
+    mirror([1, 0, 0]) flat_apple_half_body();
 }
 
-module apple_hollow_body() {
+module apple_3d_in() {
+    scale(scale)
+    rotate_extrude()
     difference() {
-        apple_body();
-        offset(-1 / scale) apple_body();
-    }
-}
-
-module apple_half_hollow_body() {
-    difference() {
-        apple_hollow_body();
+        offset(-1 / scale) flat_apple_body();
         mirror([1, 0, 0]) square([500, 800]);
     }
 }
 
-module apple_3d() {
-    scale(scale) leaf();
+module apple_3d_out() {
+    scale(scale)
+    rotate_extrude()
     difference() {
-        scale(scale) rotate_extrude() apple_half_hollow_body();
-            hole(d = 138, h = 402);
+        flat_apple_body();
+        mirror([1, 0, 0]) square([500, 800]);
+    }
+}
+
+module stem_in() {
+    h = 25;
+    d1 = 14;
+    d2 = 7;
+    translate([0, 0, 211])
+    rotate([-2, 0, 0])
+    translate([0, 0, -.05]) cylinder(h = h + .1, d1 = d1 - 2, d2 = d2 - 2);
+}
+
+module stem_out() {
+    h = 25;
+    d1 = 14;
+    d2 = 7;
+    translate([0, 0, 211])
+    rotate([-2, 0, 0])
+    cylinder(h = h, d1 = d1, d2 = d2);
+}
+
+module stem() {
+    difference() {
+        stem_out();
+        stem_in();
+    }
+}
+
+module apple_3d() {
+    difference() {
+        leaf();
+        stem_in();
+    }
+    difference() {
+        apple_3d_out();
+        apple_3d_in();
+        hole(d = 138, h = 402);
+        stem_in();
     }
     intersection() {
-        scale(scale) rotate_extrude() apple_half_body();
+        apple_3d_out();
         difference() {
             hole(d = 140, h = 400);
             hole(d = 138, h = 402);
         }
+    }
+    difference() {
+        stem();
+        apple_3d_in();
+        leaf_in();
     }
 }
 
@@ -70,8 +132,12 @@ module hole(d, h) {
     translate([-h / 2, -145, 140]) rotate([0, 90, 0]) linear_extrude(h) circle(d = d);
 }
 
+difference() {
+    apple_3d();
+    if ($preview)
+    translate([0, -500, 0]) cube([1000, 1000, 1000]);
+}
 
-apple_3d();
 
 // color("blue") rotate([90, 0, 270]) scale(scale) centered_logo();
 
