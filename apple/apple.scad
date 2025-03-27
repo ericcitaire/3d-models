@@ -1,6 +1,6 @@
 $fn = $preview ? 50 : 150;
 
-scale = .3;
+scale = .15;
 
 module centered_logo() {
     translate([-425, 648, 0]) import("Apple_logo_black.svg");
@@ -75,20 +75,22 @@ module apple_3d_out() {
 }
 
 module stem_in() {
-    h = 25;
-    d1 = 14;
-    d2 = 7;
-    translate([0, 0, 211])
-    rotate([-2, 0, 0])
-    translate([0, 0, -.05]) cylinder(h = h + .1, d1 = d1 - 2, d2 = d2 - 2);
+    h = 100;
+    d1 = 60;
+    d2 = 50;
+    scale(scale)
+    translate([0, 0, 700])
+    rotate([6, 0, 0])
+    translate([0, 0, -.05]) cylinder(h = h + .1, d1 = d1 - 2 / scale, d2 = d2 - 2 / scale);
 }
 
 module stem_out() {
-    h = 25;
-    d1 = 14;
-    d2 = 7;
-    translate([0, 0, 211])
-    rotate([-2, 0, 0])
+    h = 100;
+    d1 = 60;
+    d2 = 50;
+    scale(scale)
+    translate([0, 0, 700])
+    rotate([6, 0, 0])
     cylinder(h = h, d1 = d1, d2 = d2);
 }
 
@@ -100,6 +102,7 @@ module stem() {
 }
 
 module apple_3d() {
+    dh = 450;
     difference() {
         leaf();
         stem_in();
@@ -107,15 +110,12 @@ module apple_3d() {
     difference() {
         apple_3d_out();
         apple_3d_in();
-        hole(d = 138, h = 402);
+        hole_in();
         stem_in();
     }
     intersection() {
         apple_3d_out();
-        difference() {
-            hole(d = 140, h = 400);
-            hole(d = 138, h = 402);
-        }
+        hole();
     }
     difference() {
         stem();
@@ -128,8 +128,31 @@ module puck_light() {
     cylinder(d = 60, h = 9);
 }
 
-module hole(d, h) {
-    translate([-h / 2, -145, 140]) rotate([0, 90, 0]) linear_extrude(h) circle(d = d);
+module hole_in() {
+    h = 1000;
+    d = 450;
+    scale(scale)
+    translate([-h / 2, -485, 470])
+    rotate([0, 90, 0])
+    linear_extrude(h)
+    circle(d = d - 2 / scale);
+}
+
+module hole_out() {
+    h = 1000;
+    d = 450;
+    scale(scale)
+    translate([-h / 2, -485, 470])
+    rotate([0, 90, 0])
+    linear_extrude(h)
+    circle(d = d);
+}
+
+module hole() {
+    difference() {
+        hole_out();
+        hole_in();
+    }
 }
 
 difference() {
@@ -139,5 +162,5 @@ difference() {
 }
 
 
-// color("blue") rotate([90, 0, 270]) scale(scale) centered_logo();
+//color("blue") rotate([90, 0, 270]) scale(scale) centered_logo();
 
