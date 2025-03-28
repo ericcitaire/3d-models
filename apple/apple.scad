@@ -1,7 +1,8 @@
 $fn = $preview ? 50 : 150;
 
-scale = .05;
-walls = .5;
+scale = .2;
+walls = .6;
+supports = .4;
 
 module centered_logo() {
     translate([-425, 648, 0]) import("Apple_logo_black.svg");
@@ -156,11 +157,59 @@ module hole() {
     }
 }
 
-difference() {
-    apple_3d();
-    if ($preview)
-    translate([0, -500, 0]) cube([1000, 1000, 1000]);
+module support_walls_base(h, twist = 0, scale = 1) {
+    random_height = rands(40, 60, 360, 456);
+    random_angle = rands(0, 8, 360, 456);
+            for (angle = [0:30:359]) {
+                hh = random_height[angle];
+                linear_extrude(height = h, scale = scale, twist = twist)
+                rotate([0, 0, angle + random_angle[angle]]) polygon([
+                    [-supports / 2, 0],
+                    [+supports / 2, 0],
+                    [+supports / 2, hh],
+                    [-supports / 2, hh],
+                ]);
+            }
 }
+
+module support_walls_twisted() {
+    h = 200;
+    twist = 20;
+    support_walls_base(h = 10);
+    translate([0, 0, 10]) support_walls_base(h - 100, twist = twist);
+    translate([0, 0, 110]) rotate([0, 0, -twist]) support_walls_base(h = 50, scale = 1.7);
+}
+
+module support_walls() {
+    d1 = 60;
+    d2 = 10;
+
+    intersection() {
+        difference() {
+            support_walls_twisted();
+            translate([0, 0, 9]) cylinder(h = 135, d1 = d1, d2 = d2);
+            hole_in();
+            puck_light();
+        }
+        apple_3d_out();
+    }
+}
+
+module obj() {
+    difference() {
+        union() {
+            apple_3d();
+            support_walls();
+        }
+        #puck_light();
+        if ($preview)
+        translate([0, -500, 0]) cube([1000, 1000, 1000]);
+    }
+}
+
+obj();
+//support_walls_twisted();
+
 
 //color("blue") rotate([90, 0, 270]) scale(scale) centered_logo();
 
