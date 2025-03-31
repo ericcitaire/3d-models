@@ -1,6 +1,6 @@
-$fn = $preview ? 50 : 150;
+$fn = $preview ? 20 : 100;
 
-scale = .2;
+scale = 0.2;
 walls = .6;
 supports = .4;
 
@@ -128,6 +128,7 @@ module apple_3d() {
 
 module puck_light() {
     cylinder(d = 60, h = 9);
+    light_funnel();
 }
 
 module hole_in() {
@@ -157,41 +158,26 @@ module hole() {
     }
 }
 
-module support_walls_base(h, twist = 0, scale = 1) {
-    random_height = rands(40, 60, 360, 456);
-    random_angle = rands(0, 8, 360, 456);
-            for (angle = [0:30:359]) {
-                hh = random_height[angle];
-                linear_extrude(height = h, scale = scale, twist = twist)
-                rotate([0, 0, angle + random_angle[angle]]) polygon([
-                    [-supports / 2, 0],
-                    [+supports / 2, 0],
-                    [+supports / 2, hh],
-                    [-supports / 2, hh],
-                ]);
-            }
+module support_walls_in() {
+    linear_extrude(900 * scale)
+    scale([scale, scale, 1]) rounded_star();
 }
 
-module support_walls_twisted() {
-    h = 200;
-    twist = 20;
-    support_walls_base(h = 10);
-    translate([0, 0, 10]) support_walls_base(h - 100, twist = twist);
-    translate([0, 0, 110]) rotate([0, 0, -twist]) support_walls_base(h = 50, scale = 1.7);
+module support_walls_out() {
+    linear_extrude(900 * scale)
+    offset(supports) scale([scale, scale, 1]) rounded_star();
 }
 
-module support_walls() {
-    d1 = 60;
-    d2 = 10;
+module light_funnel() {
+    translate([0, 0, 9])
+    cylinder(d1 = 60, d2 = 0, h = 500 * scale);
+    cylinder(d = 60, h = 9);
+}
 
-    intersection() {
-        difference() {
-            support_walls_twisted();
-            translate([0, 0, 9]) cylinder(h = 135, d1 = d1, d2 = d2);
-            hole_in();
-            puck_light();
-        }
-        apple_3d_out();
+module support_walls_3d() {
+    difference() {
+        support_walls_out();
+        support_walls_in();
     }
 }
 
@@ -199,17 +185,70 @@ module obj() {
     difference() {
         union() {
             apple_3d();
-            support_walls();
+            intersection() {
+                support_walls_3d();
+                difference() {
+                    apple_3d_in();
+                    hole_in();
+                }
+            }
         }
-        #puck_light();
+        puck_light();
         if ($preview)
         translate([0, -500, 0]) cube([1000, 1000, 1000]);
     }
 }
 
 obj();
-//support_walls_twisted();
+
+module star() {
+    c = 2;
+    offset(6)
+    for (angle = [0:20:360])
+    rotate([0, 0, angle])
+    translate([0, 0, -.5])
+    polygon([
+        [-c, 0],
+        [+c, 0],
+        [0, angle % 60 == 0 ? 180 : 250],
+    ]);
+}
+
+module rounded_star() {
+    difference() {
+        circle(500);
+        minkowski() {
+            difference() {
+                square([5000, 5000], center = true);
+                star();
+            }
+            circle(3);
+        }
+    }
+}
 
 
+/*
+intersection() {
+    linear_extrude(714) difference() {
+        rounded_star(1 / scale);
+        rounded_star();
+    }
+    difference() {
+        apple_3d_in();
+        hole_in();
+    }
+}
+$/
+
+//#star();
+
+//#apple_3d();
+/*
+difference() {
+stem_in();
+apple_3d_in();
+}
+*/
 //color("blue") rotate([90, 0, 270]) scale(scale) centered_logo();
 
