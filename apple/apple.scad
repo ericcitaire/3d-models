@@ -126,9 +126,18 @@ module apple_3d() {
     }
 }
 
-module puck_light() {
+module puck_light_in() {
     cylinder(d = 60, h = 9);
-    light_funnel();
+    translate([0, 0, 9])
+    cylinder(d1 = 60, d2 = 80 * scale, h = 500 * scale);
+    cylinder(d = 60, h = 9);
+}
+
+module puck_light_out() {
+    cylinder(d = 60 + supports * 2, h = 9);
+    translate([0, 0, 9])
+    cylinder(d1 = 60 + supports * 2, d2 = 80 * scale + supports * 2, h = 500 * scale);
+    cylinder(d = 60 + supports * 2, h = 9);
 }
 
 module hole_in() {
@@ -168,12 +177,6 @@ module support_walls_out() {
     offset(supports) scale([scale, scale, 1]) rounded_star();
 }
 
-module light_funnel() {
-    translate([0, 0, 9])
-    cylinder(d1 = 60, d2 = 0, h = 500 * scale);
-    cylinder(d = 60, h = 9);
-}
-
 module support_walls_3d() {
     difference() {
         support_walls_out();
@@ -185,6 +188,11 @@ module obj() {
     difference() {
         union() {
             apple_3d();
+            difference() {
+                puck_light_out();
+                puck_light_in();
+                support_walls_in();
+            }
             intersection() {
                 support_walls_3d();
                 difference() {
@@ -193,7 +201,7 @@ module obj() {
                 }
             }
         }
-        puck_light();
+        puck_light_in();
         if ($preview)
         translate([0, -500, 0]) cube([1000, 1000, 1000]);
     }
