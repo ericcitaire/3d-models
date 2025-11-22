@@ -2,15 +2,19 @@ $fn = 60;
 
 internal_radius = 50;
 bottom_thickness = 10;
-fillet_radius = 3;
+fillet_radius = 12;
 height = 120;
 
-module base_2d(main_radius = 50, bump_count = 60, bump_radius = 2) {
+module base_2d(main_radius = 50, bump_count = 60) {
             gap = 360 / bump_count;
+            bump_radius = 130 / bump_count;
+            off = bump_radius / 2;
             echo(gap);
             for (i = [0 : gap : 360]) {
-                offset(-1) offset(1) offset(1) offset(-1) {
+                offset(-off) offset(off) offset(off) offset(-off) {
                     translate([main_radius * sin(i + gap), main_radius * cos(i + gap)])
+                        circle(bump_radius);
+                    translate([main_radius * sin(i - gap), main_radius * cos(i - gap)])
                         circle(bump_radius);
                     translate([main_radius * sin(i), main_radius * cos(i)])
                         circle(bump_radius);
@@ -29,7 +33,7 @@ difference() {
     intersection() {
         difference() {
             linear_extrude(scale = 1, twist = 0, height = height) {
-                base_2d(main_radius = internal_radius + 1);
+                base_2d(main_radius = internal_radius, bump_count = 40);
             }
             translate([0, 0, bottom_thickness + fillet_radius])
                 cylinder(h = height - bottom_thickness + fillet_radius + 1, r = internal_radius);
@@ -40,11 +44,8 @@ difference() {
                 cylinder(r = internal_radius - fillet_radius, h = fillet_radius * 2, center = true);
             }
         }
-        union() {
-            cylinder(r1 = internal_radius, r2 = internal_radius + 100, h = 100);
-            translate([0, 0, 100])
-                cylinder(r = internal_radius + 100, h = 1000);
-        }
+        cylinder(r1 = internal_radius, r2 = internal_radius + height, h = height);
+        cylinder(r1 = internal_radius + height + 1, r2 = internal_radius + 1, h = height);
     }
     // cube(10000);
 }
