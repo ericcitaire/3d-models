@@ -49,6 +49,19 @@ module cup(r = 10, b = 10, f = 10, h = 10) {
     }
 }
 
+module infill(r = 100, h = 100, o = 0) {
+    linear_extrude(height = h)
+    offset(o)
+    offset(-1) offset(1) offset(1) offset(-1)
+        for (i = [0 : 30 : 360]) {
+            hull() {
+                translate([r * sin(i), r * cos(i), 0])
+                    circle(r = 4);
+                circle(r = 1);
+            }
+        }
+}
+
 difference() {
     intersection() {
         difference() {
@@ -62,22 +75,14 @@ difference() {
         cylinder(r1 = internal_radius + height + 1, r2 = internal_radius + 1, h = height);
     }
     difference() {
-        translate([0, 0, .5]) infill(r = internal_radius, h = 20);
+        translate([0, 0, .8]) infill(r = internal_radius - 10, h = 20, o = .2);
+        translate([0, 0, .8]) infill(r = internal_radius - 10, h = 20);
+        cup(r = internal_radius, b = bottom_thickness, f = fillet_radius, h = height);
+    }
+    difference() {
+        translate([0, 0, .8]) cylinder(r = internal_radius - 1, h = height);
+        translate([0, 0, .8]) cylinder(r = internal_radius - 1.5, h = height);
         cup(r = internal_radius, b = bottom_thickness, f = fillet_radius, h = height);
     }
     if ($preview) cube(10000);
-}
-
-module infill(r = 100, h = 100) {
-    linear_extrude(scale = 1, twist = 0, height = h)
-    offset(-1) offset(1) offset(1) offset(-1)
-        for (i = [0 : 15 : 360]) {
-            if (i % 2 == 0) {
-                hull() {
-                    translate([(r - 5) * sin(i), (r - 5) * cos(i), 0])
-                        circle(r = 5);
-                    circle(r = .5);
-                }
-            }
-        }
 }
