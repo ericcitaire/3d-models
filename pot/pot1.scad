@@ -1,4 +1,4 @@
-$fn = 60;
+$fn = $preview ? 30 : 200;
 
 internal_radius = 50;
 bottom_thickness = 10;
@@ -29,6 +29,26 @@ module bottom_chamfer(r) {
     translate([0, 0, z]) cylinder(r1 = r, r2 = r + 20, h = 20);
 }
 
+module inside(r = 10, b = 10, f = 10, h = 10) {
+    cylinder(h = h - b + f + 1, r = r);
+    rotate_extrude()
+        translate([r - f, 0, 0])
+        circle(r = f);
+    cylinder(r = r - f, h = f * 2, center = true);
+}
+
+module cup(r = 10, b = 10, f = 10, h = 10) {
+    intersection() {
+        difference() {
+            translate([0, 0, b + f])
+                inside(r = r + 1, b = b + 1, f = f + 1, h = h);
+            translate([0, 0, b + f])
+                inside(r = r, b = b, f = f, h = h);
+        }
+        cylinder(r = r + 1, h = h);
+    }
+}
+
 difference() {
     intersection() {
         difference() {
@@ -36,16 +56,28 @@ difference() {
                 base_2d(main_radius = internal_radius, bump_count = 40);
             }
             translate([0, 0, bottom_thickness + fillet_radius])
-                cylinder(h = height - bottom_thickness + fillet_radius + 1, r = internal_radius);
-            translate([0, 0, bottom_thickness + fillet_radius]) {
-                rotate_extrude(convexity = 10)
-                translate([internal_radius - fillet_radius, 0, 0])
-                    circle(r = fillet_radius);
-                cylinder(r = internal_radius - fillet_radius, h = fillet_radius * 2, center = true);
-            }
+                inside(r = internal_radius, b = bottom_thickness, f = fillet_radius, h = height);
         }
         cylinder(r1 = internal_radius, r2 = internal_radius + height, h = height);
         cylinder(r1 = internal_radius + height + 1, r2 = internal_radius + 1, h = height);
     }
-    // cube(10000);
+    difference() {
+        translate([0, 0, .5]) infill(r = internal_radius, h = 20);
+        cup(r = internal_radius, b = bottom_thickness, f = fillet_radius, h = height);
+    }
+    if ($preview) cube(10000);
+}
+
+module infill(r = 100, h = 100) {
+    linear_extrude(scale = 1, twist = 0, height = h)
+    offset(-1) offset(1) offset(1) offset(-1)
+        for (i = [0 : 15 : 360]) {
+            if (i % 2 == 0) {
+                hull() {
+                    translate([(r - 5) * sin(i), (r - 5) * cos(i), 0])
+                        circle(r = 5);
+                    circle(r = .5);
+                }
+            }
+        }
 }
